@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PipeFitter JSON Adapter Demo</title>
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f5f5f5;
+      }
+
+      .container {
+        background: white;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      h1 {
+        color: #333;
+        border-bottom: 2px solid #007acc;
+        padding-bottom: 10px;
+      }
+
+      h2 {
+        color: #007acc;
+        margin-top: 30px;
+      }
+
+      .example-section {
+        margin-bottom: 30px;
+      }
+
+      .input-output {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        margin-top: 15px;
+      }
+
+      .input-section,
+      .output-section {
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 15px;
+      }
+
+      .input-section h3,
+      .output-section h3 {
+        margin-top: 0;
+        color: #666;
+        font-size: 14px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      textarea,
+      pre {
+        width: 100%;
+        font-family: "Courier New", monospace;
+        font-size: 12px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        padding: 10px;
+        box-sizing: border-box;
+      }
+
+      textarea {
+        height: 150px;
+        resize: vertical;
+      }
+
+      pre {
+        background-color: #f8f8f8;
+        overflow-x: auto;
+        white-space: pre-wrap;
+        margin: 0;
+        min-height: 100px;
+      }
+
+      button {
+        background-color: #007acc;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+        margin: 10px 5px 10px 0;
+      }
+
+      button:hover {
+        background-color: #005a99;
+      }
+
+      button:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+      }
+
+      .error {
+        color: #d73a49;
+        background-color: #ffeaea;
+        border: 1px solid #f1c0c0;
+        padding: 10px;
+        border-radius: 4px;
+        margin-top: 10px;
+      }
+
+      .success {
+        color: #28a745;
+        background-color: #eafaf1;
+        border: 1px solid #c6e6d1;
+        padding: 10px;
+        border-radius: 4px;
+        margin-top: 10px;
+      }
+
+      .feature-list {
+        background-color: #f8f9fa;
+        border-left: 4px solid #007acc;
+        padding: 15px;
+        margin: 15px 0;
+      }
+
+      .feature-list ul {
+        margin: 0;
+        padding-left: 20px;
+      }
+
+      .status {
+        float: right;
+        padding: 5px 10px;
+        border-radius: 15px;
+        font-size: 12px;
+        font-weight: bold;
+      }
+
+      .status.ready {
+        background-color: #d4edda;
+        color: #155724;
+      }
+
+      .status.error {
+        background-color: #f8d7da;
+        color: #721c24;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>
+        PipeFitter JSON Adapter Demo
+        <span id="status" class="status">Loading...</span>
+      </h1>
+
+      <div class="feature-list">
+        <h3>Features Demonstrated:</h3>
+        <ul>
+          <li>JSON string parsing to FNode structure</li>
+          <li>JavaScript object conversion to FNode</li>
+          <li>FNode to JSON output with formatting options</li>
+          <li>Pipeline processing with transformations</li>
+          <li>Format-aware operations using JSON semantics</li>
+          <li>Error handling and validation</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="example-section">
+        <h2>Example 1: Basic JSON Processing</h2>
+        <p>
+          Parse JSON data, process it through a pipeline, and output formatted
+          results.
+        </p>
+
+        <div class="input-output">
+          <div class="input-section">
+            <h3>Input JSON</h3>
+            <textarea id="jsonInput1" placeholder="Enter JSON data...">
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "Alice Johnson",
+      "email": "alice@example.com",
+      "active": true,
+      "department": "Engineering"
+    },
+    {
+      "id": 2,
+      "name": "Bob Smith",
+      "email": "bob@example.com", 
+      "active": false,
+      "department": "Marketing"
+    },
+    {
+      "id": 3,
+      "name": "Carol Davis",
+      "email": "carol@example.com",
+      "active": true,
+      "department": "Engineering"
+    }
+  ]
+}
+                    </textarea
+            >
+            <button onclick="processBasicExample()">Process JSON</button>
+          </div>
+
+          <div class="output-section">
+            <h3>Pipeline Output</h3>
+            <pre id="output1">Click "Process JSON" to see results...</pre>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="example-section">
+        <h2>Example 2: Format-Aware Operations</h2>
+        <p>
+          Use format-aware operations to filter and transform data while
+          maintaining JSON semantics.
+        </p>
+
+        <div class="input-output">
+          <div class="input-section">
+            <h3>Input Data</h3>
+            <textarea id="jsonInput2" placeholder="Enter JSON data...">
+{
+  "products": [
+    {
+      "id": "prod1",
+      "name": "Laptop",
+      "price": 999.99,
+      "category": "Electronics",
+      "inStock": true,
+      "tags": ["computer", "portable"]
+    },
+    {
+      "id": "prod2", 
+      "name": "Coffee Mug",
+      "price": 12.50,
+      "category": "Kitchen",
+      "inStock": false,
+      "tags": ["ceramic", "beverage"]
+    },
+    {
+      "id": "prod3",
+      "name": "Smartphone",
+      "price": 599.99,
+      "category": "Electronics", 
+      "inStock": true,
+      "tags": ["mobile", "communication"]
+    }
+  ]
+}
+                    </textarea
+            >
+            <button onclick="processFormatAwareExample()">
+              Apply Format-Aware Operations
+            </button>
+          </div>
+
+          <div class="output-section">
+            <h3>Filtered & Transformed Output</h3>
+            <pre id="output2">
+Click "Apply Format-Aware Operations" to see results...</pre
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="example-section">
+        <h2>Example 3: Custom Pipeline with Multiple Transformations</h2>
+        <p>
+          Chain multiple transformations including filtering, mapping, and
+          custom business logic.
+        </p>
+
+        <div class="input-output">
+          <div class="input-section">
+            <h3>Input Data</h3>
+            <textarea id="jsonInput3" placeholder="Enter JSON data...">
+{
+  "orders": [
+    {
+      "orderId": "ORD001",
+      "customerId": "CUST001",
+      "items": [
+        {"productId": "P1", "quantity": 2, "unitPrice": 25.00},
+        {"productId": "P2", "quantity": 1, "unitPrice": 15.50}
+      ],
+      "status": "pending",
+      "orderDate": "2024-01-15"
+    },
+    {
+      "orderId": "ORD002", 
+      "customerId": "CUST002",
+      "items": [
+        {"productId": "P3", "quantity": 3, "unitPrice": 8.99}
+      ],
+      "status": "completed",
+      "orderDate": "2024-01-14"
+    }
+  ]
+}
+                    </textarea
+            >
+            <button onclick="processComplexExample()">
+              Run Complex Pipeline
+            </button>
+          </div>
+
+          <div class="output-section">
+            <h3>Processed Results</h3>
+            <pre id="output3">
+Click "Run Complex Pipeline" to see results...</pre
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Include PipeFitter bundle -->
+    <script
+      src="../dist/bundle/pipefitter.esm.js"
+      type="module"
+      id="pipefitter-script"
+    ></script>
+
+    <script type="module">
+      // Import PipeFitter components
+      import {
+        PipeFitter,
+        JsonAdapter,
+        FormatAwareOperations,
+        TransformationEngine,
+        JSON_SEMANTICS,
+        FormatType,
+        createFNode,
+        FNodeType,
+      } from "../dist/bundle/pipefitter.esm.js";
+
+      // Global variables for demo
+      window.PipeFitter = PipeFitter;
+      window.JsonAdapter = JsonAdapter;
+      window.FormatAwareOperations = FormatAwareOperations;
+      window.TransformationEngine = TransformationEngine;
+      window.JSON_SEMANTICS = JSON_SEMANTICS;
+      window.FormatType = FormatType;
+      window.createFNode = createFNode;
+      window.FNodeType = FNodeType;
+
+      // Initialize transformation engine
+      const engine = new TransformationEngine();
+      engine.register(JSON_SEMANTICS);
+      const operations = new FormatAwareOperations(engine);
+      window.operations = operations;
+
+      // Update status
+      document.getElementById("status").textContent = "Ready";
+      document.getElementById("status").className = "status ready";
+
+      // Make functions global for onclick handlers
+      window.processBasicExample = processBasicExample;
+      window.processFormatAwareExample = processFormatAwareExample;
+      window.processComplexExample = processComplexExample;
+      window.showError = showError;
+      window.showSuccess = showSuccess;
+
+      // Demo functions
+      function processBasicExample() {
+        try {
+          const input = document.getElementById("jsonInput1").value;
+          const outputElement = document.getElementById("output1");
+
+          if (!input.trim()) {
+            showError(outputElement, "Please enter JSON data");
+            return;
+          }
+
+          // Create pipeline
+          const result = new PipeFitter()
+            .from(JsonAdapter.string(input))
+            .map((msg) => {
+              console.log(msg);
+
+              // Add processing timestamp
+              return {
+                ...msg,
+                metadata: {
+                  ...msg.metadata,
+                  processed: {
+                    timestamp: new Date().toISOString(),
+                    operation: "basic_processing",
+                  },
+                },
+              };
+            })
+            .to(JsonAdapter.pretty());
+
+          showSuccess(outputElement, "Pipeline executed successfully!");
+          outputElement.innerHTML += `<pre>${result}</pre>`;
+        } catch (error) {
+          showError(document.getElementById("output1"), error.message);
+        }
+      }
+
+      function processFormatAwareExample() {
+        try {
+          const input = document.getElementById("jsonInput2").value;
+          const outputElement = document.getElementById("output2");
+
+          if (!input.trim()) {
+            showError(outputElement, "Please enter JSON data");
+            return;
+          }
+
+          // Create pipeline with format-aware operations
+          const result = new PipeFitter()
+            .from(JsonAdapter.string(input))
+            .map((msg) => {
+              // Filter for in-stock electronics
+              return operations.filter(
+                  msg,
+                  (item) => {
+                    console.log(item)
+                      const category = operations.extractValue(item, 'category', FormatType.JSON);
+                      const inStock = operations.extractValue(item, 'inStock', FormatType.JSON);
+                      return category === 'Electronics' && inStock === true;
+                  },
+                  FormatType.JSON
+              );
+            })
+            .map((msg) => {
+              // Add computed fields
+              return operations.transform(
+                msg,
+                (item) => {
+                  const price = operations.extractValue(
+                    item,
+                    "price",
+                    FormatType.JSON
+                  );
+                  const discountPrice = price * 0.9; // 10% discount
+
+                  return {
+                    ...item,
+                    children: [
+                      ...(item.children || []),
+                      createFNode(
+                        FNodeType.FIELD,
+                        "discountPrice",
+                        discountPrice
+                      ),
+                      createFNode(FNodeType.FIELD, "discountPercent", 10),
+                    ],
+                  };
+                },
+                FormatType.JSON
+              );
+            })
+            .to(JsonAdapter.pretty());
+
+          showSuccess(outputElement, "Format-aware operations completed!");
+          outputElement.innerHTML += `<pre>${result}</pre>`;
+        } catch (error) {
+          showError(document.getElementById("output2"), error.message);
+        }
+      }
+
+      function processComplexExample() {
+        try {
+          const input = document.getElementById("jsonInput3").value;
+          const outputElement = document.getElementById("output3");
+
+          if (!input.trim()) {
+            showError(outputElement, "Please enter JSON data");
+            return;
+          }
+
+          // Complex pipeline with multiple transformations
+          const result = new PipeFitter()
+            .from(JsonAdapter.string(input))
+            .map((msg) => {
+              // Calculate order totals
+              return operations.transform(
+                msg,
+                (order) => {
+                  const items = operations.extractValue(
+                    order,
+                    "items",
+                    FormatType.JSON
+                  );
+                  let total = 0;
+
+                  if (Array.isArray(items)) {
+                    total = items.reduce((sum, item) => {
+                      const qty = item.quantity || 0;
+                      const price = item.unitPrice || 0;
+                      return sum + qty * price;
+                    }, 0);
+                  }
+
+                  return {
+                    ...order,
+                    children: [
+                      ...(order.children || []),
+                      createFNode(FNodeType.FIELD, "totalAmount", total),
+                      createFNode(
+                        FNodeType.FIELD,
+                        "processingDate",
+                        new Date().toISOString()
+                      ),
+                    ],
+                  };
+                },
+                FormatType.JSON
+              );
+            })
+            .map((msg) => {
+              // Filter for orders over $20
+              return operations.filter(
+                msg,
+                (order) => {
+                  const total = operations.extractValue(
+                    order,
+                    "totalAmount",
+                    FormatType.JSON
+                  );
+                  return total > 20;
+                },
+                FormatType.JSON
+              );
+            })
+            .to(JsonAdapter.pretty());
+
+          showSuccess(outputElement, "Complex pipeline completed!");
+          outputElement.innerHTML += `<pre>${result}</pre>`;
+        } catch (error) {
+          showError(document.getElementById("output3"), error.message);
+        }
+      }
+
+      function showError(element, message) {
+        element.innerHTML = `<div class="error">Error: ${message}</div>`;
+      }
+
+      function showSuccess(element, message) {
+        element.innerHTML = `<div class="success">${message}</div>`;
+      }
+    </script>
+
+    <script>
+      // Fallback for when module loading fails
+      window.addEventListener("error", function (e) {
+        if (e.filename && e.filename.includes("pipefitter")) {
+          document.getElementById("status").textContent = "Error Loading";
+          document.getElementById("status").className = "status error";
+
+          // Add fallback message
+          const containers = document.querySelectorAll(".container");
+          if (containers.length > 0) {
+            const errorDiv = document.createElement("div");
+            errorDiv.className = "container";
+            errorDiv.innerHTML = `
+                        <div class="error">
+                            <h3>PipeFitter Bundle Not Found</h3>
+                            <p>This demo requires the PipeFitter bundle to be built. Please run:</p>
+                            <pre>npm run build</pre>
+                            <p>Then refresh this page.</p>
+                        </div>
+                    `;
+            containers[0].parentNode.insertBefore(errorDiv, containers[1]);
+          }
+        }
+      });
+    </script>
+  </body>
+</html>

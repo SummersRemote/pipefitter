@@ -3,12 +3,20 @@ import { Message } from './message.js';
 /**
  * Core adapter interface
  */
-export interface Adapter {
+
+export interface InputAdapter {
+  handle(input: any, options?: any): Message | Promise<Message>;
+
   /**
-   * Process a message
+   * Optional lifecycle methods
    */
-  handle(message: Message, options?: any): Message | Promise<Message>;
-  
+  start?(): void | Promise<void>;
+  stop?(): void | Promise<void>;
+}
+
+export interface OutputAdapter<T = any> {
+  handle(message: Message, options?: any): T | Promise<T>;
+
   /**
    * Optional lifecycle methods
    */
@@ -19,6 +27,8 @@ export interface Adapter {
 /**
  * Type guard for adapters
  */
+export type Adapter = InputAdapter | OutputAdapter;
+
 export function isAdapter(obj: any): obj is Adapter {
   return obj && typeof obj.handle === 'function';
 }

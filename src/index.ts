@@ -1,3 +1,4 @@
+// src/index.ts
 // Core exports
 export { PipeFitter, PipelineHook } from './core/pipefitter.js';
 
@@ -13,6 +14,7 @@ export { ResourceManager, CleanupCallback, ManagedAdapter } from './core/resourc
 
 // Adapters
 export { Adapter, isAdapter } from './core/adapter.js';
+export { JsonAdapter, JsonAdapterOptions } from './adapters/index.js';
 
 // Errors
 export {
