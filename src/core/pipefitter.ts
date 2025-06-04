@@ -1,4 +1,3 @@
-
 import { Message, createMessage, createMessageFromFNode } from './message.js';
 import { Context, createContext, BranchState } from './context.js';
 import { FNode, FNodeType, createFNode } from './fnode.js';
@@ -43,7 +42,13 @@ export class PipeFitter {
     if (isAdapter(source)) {
       this.context.resources.registerAdapter(source);
       const inputMessage = initialMessage || createMessage(this.context);
-      this.message = source.handle(inputMessage, options);
+      const result = source.handle(inputMessage, options);
+      
+      // Handle both sync and async adapter responses
+      if (result instanceof Promise) {
+        throw new Error('Async adapters not supported in from(). Use async source adapters in to() instead.');
+      }
+      this.message = result;
     } else {
       this.message = initialMessage || createMessageFromFNode(source, this.context);
     }
@@ -69,16 +74,23 @@ export class PipeFitter {
       if (beforeResult) currentMessage = beforeResult;
     }
 
-    let result = target.handle(currentMessage, options);
+    const result = target.handle(currentMessage, options);
 
     if (hooks?.after) {
-      const afterResult = hooks.after(result);
-      if (afterResult !== undefined) {
-        result = afterResult;
+      if (result instanceof Promise) {
+        return result.then(resolvedResult => {
+          const afterResult = hooks.after!(resolvedResult);
+          return afterResult !== undefined ? afterResult : resolvedResult;
+        }) as T | Promise<T>;
+      } else {
+        const afterResult = hooks.after(result);
+        if (afterResult !== undefined) {
+          return afterResult as T;
+        }
       }
     }
 
-    return result;
+    return result as T | Promise<T>;
   }
 
   map(fn: (msg: Message) => Message, hooks?: PipelineHook): PipeFitter {
