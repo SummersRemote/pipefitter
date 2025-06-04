@@ -1,0 +1,66 @@
+{
+  "name": "pipefitter",
+  "version": "1.0.0",
+  "description": "Minimal fluent API framework for pipeline processing",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist/",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "npm run clean && npm run build:esm",
+    "build:esm": "tsc",
+    "clean": "rimraf dist/",
+    "dev": "tsc --watch",
+    "test": "node examples/basic-usage.js",
+    "test:config": "node examples/configuration.js",
+    "test:resources": "node examples/resource-management.js",
+    "test:extensions": "node examples/extensions.js",
+    "test:all": "npm run test && npm run test:config && npm run test:resources && npm run test:extensions",
+    "lint": "eslint src/ --ext .ts",
+    "lint:fix": "eslint src/ --ext .ts --fix",
+    "typecheck": "tsc --noEmit",
+    "prepare": "npm run build"
+  },
+  "keywords": [
+    "pipeline",
+    "fluent-api",
+    "functional-programming",
+    "data-processing",
+    "typescript",
+    "adapter-pattern",
+    "message-processing",
+    "esm"
+  ],
+  "author": "PipeFitter Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-org/pipefitter.git"
+  },
+  "bugs": {
+    "url": "https://github.com/your-org/pipefitter/issues"
+  },
+  "homepage": "https://github.com/your-org/pipefitter#readme",
+  "devDependencies": {
+    "@types/node": "^20.10.5",
+    "@typescript-eslint/eslint-plugin": "^6.15.0",
+    "@typescript-eslint/parser": "^6.15.0",
+    "eslint": "^8.56.0",
+    "rimraf": "^5.0.5",
+    "typescript": "^5.3.3"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "sideEffects": false
+}
