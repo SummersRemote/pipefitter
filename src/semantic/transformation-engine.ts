@@ -1,0 +1,1 @@
+// Placeholder for src/semantic/transformation-engine.ts

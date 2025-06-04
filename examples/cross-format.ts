@@ -1,0 +1,1 @@
+// Placeholder for examples/cross-format.ts
